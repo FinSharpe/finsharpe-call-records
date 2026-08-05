@@ -18,7 +18,7 @@ else in this library is cheap.
 from __future__ import annotations
 
 from datetime import datetime
-from enum import StrEnum
+from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -28,7 +28,10 @@ from pydantic import BaseModel, ConfigDict, Field
 CALL_RECORD_FORMAT_VERSION = 1
 
 
-class PrincipalType(StrEnum):
+# `str, Enum` rather than `StrEnum`: this library has to install into every
+# provider, and StrEnum is 3.11+. The two behave identically for what is done
+# with them here — comparison by value and Pydantic JSON serialisation.
+class PrincipalType(str, Enum):
     """Who a Call Record is attributed to.
 
     Recorded explicitly rather than inferred. Orchestrator Access reaches
@@ -41,7 +44,7 @@ class PrincipalType(StrEnum):
     SERVICE_IDENTITY = "service_identity"
 
 
-class Outcome(StrEnum):
+class Outcome(str, Enum):
     """How a tool call ended.
 
     ``FAILED`` is a tool-level error the caller was told about (FastMCP's

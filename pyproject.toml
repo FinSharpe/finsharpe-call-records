@@ -1,9 +1,12 @@
 [project]
 name = "finsharpe-call-records"
-version = "0.1.0"
+version = "0.1.1"
 description = "Call Record emission for FinSharpe MCP providers"
 readme = "README.md"
-requires-python = ">=3.11"
+# Deliberately the lowest floor any provider declares. This library's whole job
+# is to install into all of them; a floor above tradekit's own >=3.10 made the
+# dependency unresolvable rather than merely inconvenient.
+requires-python = ">=3.10"
 dependencies = [
     # Floor, not a pin: providers deploy independently and several versions of
     # this library are live at once, so it must install alongside whatever

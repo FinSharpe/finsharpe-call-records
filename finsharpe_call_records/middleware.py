@@ -18,7 +18,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from fastmcp.exceptions import ToolError
@@ -64,7 +64,9 @@ class CallRecordMiddleware(Middleware):
     async def on_call_tool(
         self, context: MiddlewareContext, call_next: CallNext
     ) -> Any:
-        started_at = datetime.now(UTC)
+        # `timezone.utc`, not `datetime.UTC`: the latter is 3.11+ and this
+        # library must install into every provider (see record.py).
+        started_at = datetime.now(timezone.utc)
         clock = time.perf_counter()
 
         try:

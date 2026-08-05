@@ -20,7 +20,7 @@ Consumed as a git dependency — never vendored or copied:
 
 ```toml
 dependencies = [
-    "finsharpe-call-records @ git+https://github.com/FinSharpe/finsharpe-call-records.git@v0.1.0",
+    "finsharpe-call-records @ git+https://github.com/FinSharpe/finsharpe-call-records.git@v0.1.1",
 ]
 ```
 
