@@ -1,0 +1,32 @@
+[project]
+name = "finsharpe-call-records"
+version = "0.1.0"
+description = "Call Record emission for FinSharpe MCP providers"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    # Floor, not a pin: providers deploy independently and several versions of
+    # this library are live at once, so it must install alongside whatever
+    # FastMCP each of them already has. 3.2.4 is the version validated across
+    # the providers today; the middleware interface has been stable since 2.9.
+    "fastmcp>=3.2.4",
+    "httpx>=0.27",
+    "pydantic>=2.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["finsharpe_call_records"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
