@@ -14,15 +14,45 @@ limit checking, no retention. Those change often and per-provider; the record
 format must not. Keeping this surface minimal is what makes providers
 independently deployable and what makes adding the sixth MCP cheap.
 
+This package is published for FinSharpe's own MCP providers. It is public
+because its consumers are, not because it is offered for general use: outside
+that use there is no stability guarantee, and the Python surface may change
+between versions without ceremony. The artifact under compatibility discipline
+is [the wire contract](#the-wire-contract) — the record format — not this API.
+
 ## Install
 
-Consumed as a git dependency — never vendored or copied:
+Consumed as a dependency — never vendored or copied — pinned to an **exact
+commit sha**:
 
 ```toml
 dependencies = [
-    "finsharpe-call-records @ git+https://github.com/FinSharpe/finsharpe-call-records.git@v0.1.1",
+    "finsharpe-call-records @ git+https://github.com/FinSharpe/finsharpe-call-records.git@bfd6eaa88616450291198086c4eb089d80af5c42",  # v0.1.1
 ]
 ```
+
+Not a tag. A tag re-resolves on every build and can be force-moved, and provider
+Dockerfiles run `pip install -e .` against a `uv.lock` that no Dockerfile copies
+— so anything movable drifts silently, on a path that is fire-and-forget by
+construction and therefore never turns anything red.
+
+A direct reference costs the consuming project two things, both of which fail
+only when its Docker image is built and neither of which any test reaches:
+
+- **`git` in the image.** pip shells out to the git binary to clone this, and
+  `python:*-slim` has none. Add it to the apt layer.
+- **`allow-direct-references`.** hatchling refuses to generate metadata for a
+  project declaring a direct reference. Invisible locally, because the consuming
+  project is already installed editable.
+
+  ```toml
+  [tool.hatch.metadata]
+  allow-direct-references = true
+  ```
+
+Both disappear when this library moves to PyPI and the pin becomes an exact
+`==` version — decided in `finsharpe-agents` ADR-0008, tracked in
+FinSharpe/finsharpe-agents#85.
 
 ## Use
 
