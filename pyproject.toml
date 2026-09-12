@@ -12,7 +12,13 @@ dependencies = [
     # this library are live at once, so it must install alongside whatever
     # FastMCP each of them already has. 3.2.4 is the version validated across
     # the providers today; the middleware interface has been stable since 2.9.
-    "fastmcp>=3.2.4",
+    # CEILING (Sept 2026): fastmcp 4.0.0 moved to `fastmcp-slim`, which requires
+    # `mcp>=2.0`, and mcp 2.x dropped `mcp.shared.context.RequestContext`. That
+    # is what crash-looped the agents deployment, via an unbounded fastmcp in
+    # `finsharpe-agents/libs/tradekit`. The providers are held below fastmcp 4
+    # together so the ecosystem crosses that major in one deliberate move rather
+    # than one image build at a time.
+    "fastmcp>=3.2.4,<4",
     "httpx>=0.27",
     "pydantic>=2.7",
 ]
